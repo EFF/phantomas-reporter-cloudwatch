@@ -23,14 +23,23 @@ describe('phantomas cloudwatch reporter', function() {
 	});
 
     describe('initialization', function(){
+        it('should throw an error when required params are not provided', function(){
+            var reporterParamsWithMissingValues = [AN_ACCESS_KEY_ID];
+            var phantomasResults = {
+                getMetrics : jasmine.createSpy('getMetrics').andReturn({some:'metrics'})
+            };
+
+            var boundedReporter = reporter.bind(this, phantomasResults, reporterParamsWithMissingValues, {});
+
+            expect(boundedReporter).toThrow();
+        });
+
         it('should initialize cloudwatch properly given full cohfiguration', function(){
             var phantomasResults = {
                 getMetrics : jasmine.createSpy('getMetrics').andReturn({some:'metrics'})
             };
-            var reporterModuleWrapper = {reporter : reporter};
-            spyOn(reporterModuleWrapper, 'reporter').andCallThrough();
 
-            reporterModuleWrapper.reporter(phantomasResults, VALID_REPORTER_OPTIONS, {}).render();
+            reporter(phantomasResults, VALID_REPORTER_OPTIONS, {}).render();
             var execpecteCloudWatchParams = {
                 accessKeyId : AN_ACCESS_KEY_ID,
                 secretAccessKey : A_SECRET_KEY,
@@ -48,10 +57,8 @@ describe('phantomas cloudwatch reporter', function() {
             var phantomasResults = {
                 getMetrics : jasmine.createSpy('getMetrics').andReturn({some:'metrics'})
             };
-            var reporterModuleWrapper = {reporter : reporter};
-            spyOn(reporterModuleWrapper, 'reporter').andCallThrough();
 
-            reporterModuleWrapper.reporter(phantomasResults, keysOnlyReporterOptions, {}).render();
+            reporter(phantomasResults, keysOnlyReporterOptions, {}).render();
             var execpecteCloudWatchParams = {
                 accessKeyId : AN_ACCESS_KEY_ID,
                 secretAccessKey : A_SECRET_KEY,

@@ -59,6 +59,8 @@ module.exports = function(results, reporterOptions, options) {
 
 	// -R cloudwatch:<AWSAccessKeyId>:<AWSSecretKey>:<AWSRegion>:<CloudWatchApiVersion>:<CloudWatchNameSpace>
 	if (reporterOptions.length > 0) {
+		if(reporterOptions.length < 2) throw new Error('Keys have to be provided for cloudwatch reporter');
+
 		options['aws-access-key-id'] = reporterOptions[0];
 		options['aws-secret-key'] = reporterOptions[1];
 		options['aws-region'] = reporterOptions[2];
